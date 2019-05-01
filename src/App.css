@@ -3,7 +3,7 @@ body {
   padding-bottom: 75px;
 }
 
-nav a {
+nav a, nav button i {
   color: white;
 }
 
