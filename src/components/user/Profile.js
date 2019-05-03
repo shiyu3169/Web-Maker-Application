@@ -112,7 +112,7 @@ export default class Profile extends Component {
                         </div>
                         <Link
                             className="btn btn-primary btn-block"
-                            to="/user/123/website"
+                            to={`/user/${this.props.match.params.uid}/website`}
                         >
                             Websites
                         </Link>
