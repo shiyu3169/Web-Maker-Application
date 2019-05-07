@@ -1,82 +1,74 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import uuid from "uuid"
-export default class WebsiteNew extends Component { 
-
-    state={
+import uuid from "uuid";
+export default class WebsiteNew extends Component {
+    state = {
         uid: this.props.match.params.uid,
         websites: [],
         name: "",
         description: ""
-    }
+    };
 
-    componentDidMount(){
+    componentDidMount() {
         this.filterWebsites(this.props.websites);
     }
 
-    filterWebsites = (websites) => {
+    filterWebsites = websites => {
         const newWebsites = websites.filter(
-            website => (website.developerId === this.state.uid)
-        )
+            website => website.developerId === this.state.uid
+        );
         this.setState({
             websites: newWebsites
-        })
-    }
+        });
+    };
 
     onChange = e => {
         this.setState({
             [e.target.name]: e.target.value
         });
-    }
+    };
 
     onSubmit = e => {
-        const {name, description, uid} = this.state
+        const { name, description, uid } = this.state;
         e.preventDefault();
         const newWeb = {
-            _id: uuid(), 
-            name, 
-            developerId: uid, 
+            _id: uuid(),
+            name,
+            developerId: uid,
             description
-        }
+        };
         this.props.addWeb(newWeb);
         this.props.history.push(`/user/${this.state.uid}/website`);
-    }
+    };
 
     render() {
-        const {uid} = this.state;
+        const { uid } = this.state;
         return (
             <div>
-                <nav className="navbar navbar-dark bg-primary fixed-top row">
-                    <div className="col-4 d-none d-sm-block">
-                        <Link className="color-white" to={`/user/${uid}/website`}>
-                            <i className="fas fa-chevron-left" />
+                <nav className="navbar navbar-light bg-dark fixed-top row">
+                    <div className="col-lg-4 d-none d-lg-block text-center text-white">
+                        <Link className="float-left" to="/user/:uid/website">
+                            <i className="fas fa-arrow-circle-left" />
                         </Link>
-                        <Link className="color-white" to={`/user/${uid}/website`}>
-                            <h5>Websites</h5>
-                        </Link>
-                        <span
-                            className="color-white float-right"
-                        >
-                            <i className="fas fa-plus" />
-                        </span>
-                    </div>
-
-                    <div className="col-sm-8">
+                        <span className="">Websites</span>
                         <Link
-                            className="color-white d-sm-none"
+                            className="float-right"
+                            to="/user/:uid/website/:wid/page/newl"
+                        >
+                            <i className="far fa-plus-square" />
+                        </Link>
+                    </div>
+                    <div className="col-lg-8 text-center text-white">
+                        <Link
+                            className="d-lg-none float-left"
                             to="/user/:uid/website"
                         >
-                            <i className="fas fa-chevron-left" />
+                            <i className="fas fa-arrow-circle-left" />
                         </Link>
-                        <span className="color-white">
-                            <h5 className="display-inline">New Website</h5>
-                        </span>
-                        <button
-                            form="newWebForm"
-                            className="color-white float-right btn"
-                        >
-                            <i className="fas fa-check" />
-                        </button>
+                        <span className="">New Website</span>
+                        <Link className="float-right" to="/user/:uid/website">
+                            <i className="far fa-check-circle" />
+                        </Link>
                     </div>
                 </nav>
 
@@ -84,18 +76,28 @@ export default class WebsiteNew extends Component {
                     <div className="col-4 d-none d-sm-block">
                         <div className="container-fluid">
                             <ul className="list-group">
-                            {
-                            this.state.websites.map(
-                                (website) => (
-                                    <li key={website._id} className="list-group-item">
-                                        <Link to={`/user/${uid}/website/${website._id}/page`}>{website.name}</Link>
-                                        <Link to={`/user/${uid}/website/${website._id}`} className="float-right">
-                                            <i className="fas fa-cog"></i>
+                                {this.state.websites.map(website => (
+                                    <li
+                                        key={website._id}
+                                        className="list-group-item"
+                                    >
+                                        <Link
+                                            to={`/user/${uid}/website/${
+                                                website._id
+                                            }/page`}
+                                        >
+                                            {website.name}
+                                        </Link>
+                                        <Link
+                                            to={`/user/${uid}/website/${
+                                                website._id
+                                            }`}
+                                            className="float-right"
+                                        >
+                                            <i className="fas fa-cog" />
                                         </Link>
                                     </li>
-                                )
-                            )
-                        }
+                                ))}
                             </ul>
                         </div>
                     </div>
@@ -138,9 +140,7 @@ export default class WebsiteNew extends Component {
                                 >
                                     Cancel
                                 </Link>
-                                <button
-                                    className="btn btn-lg btn-success float-right"
-                                >
+                                <button className="btn btn-lg btn-success float-right">
                                     Submit
                                 </button>
                             </form>

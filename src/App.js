@@ -1,12 +1,18 @@
 import React, {Component} from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+// Users
 import Login from "./components/user/Login";
 import Register from "./components/user/Register";
 import Profile from "./components/user/Profile";
+// Websites
 import WebsiteList from "./components/website/WebsiteList";
 import WebsiteNew from "./components/website/WebsiteNew"
 import WebsiteEdit from "./components/website/WebsiteEdit"
+// Pages
+import PageList from "./components/page/PageList"
+import PageNew from "./components/page/PageNew"
+import PageEdit from "./components/page/PageEdit"
 class App extends Component {
 
     state = {
@@ -108,6 +114,39 @@ class App extends Component {
         })
     }
 
+    addPage = newPage => {
+        const newPages = this.state.pages;
+        newPages.push(newPage);
+        this.setState({
+            pages: newPages
+        });
+    }
+
+    editPage = newPage => {
+        const newPages = this.state.pages.map(
+            (page) => {
+                if(page._id === newPage._id) {
+                    page = newPage
+                }
+                return page;
+            }
+        )
+        this.setState({
+            pages: newPages
+        })
+    }
+
+    deletePage = pid => {
+        const newPages = this.state.pages.filter(
+            (page) => (
+                page._id !== pid
+            )
+        )
+        this.setState({
+            pages: newPages
+        })
+    }
+
     render() {
         
         return (
@@ -120,6 +159,9 @@ class App extends Component {
                     <Route exact path="/user/:uid/website" render= { props => (<WebsiteList {...props} websites={this.state.websites}/>)} />
                     <Route exact path="/user/:uid/website/new" render={ props => (<WebsiteNew {...props} websites={this.state.websites} addWeb={this.addWeb}/>)} />
                     <Route exact path="/user/:uid/website/:wid" render={ props => (<WebsiteEdit {...props} websites={this.state.websites} deleteWeb={this.deleteWeb} editWeb={this.editWeb}/>)} />
+                    <Route exact path="/user/:uid/website/:wid/page" render={ props => (<PageList {...props} pages={this.state.pages} />)} />
+                    <Route exact path="/user/:uid/website/:wid/page/new" render={ props => (<PageNew {...props} pages={this.state.pages} addPage={this.addPage} />)} />
+                    <Route exact path="/user/:uid/website/:wid/page/:pid" render={ props => (<PageEdit {...props} pages={this.state.pages} editPage={this.editPage} deletePage={this.deletePage} />)} />
                 </Switch>
             </Router>
         );
