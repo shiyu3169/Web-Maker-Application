@@ -1,125 +1,139 @@
 import React, { Component } from "react";
-
+import {Link} from "react-router-dom";
 export default class WidgetList extends Component {
+    state= {
+        uid: "",
+        wid: "",
+        pid: "",
+        widgets: []
+    }
+
+    async componentDidMount() {
+        await this.setState({
+            uid: this.props.match.params.uid,
+            wid: this.props.match.params.wid,
+            pid: this.props.match.params.pid
+        })
+        this.filterWidgets(this.state.pid);
+    }
+
+    filterWidgets = (pid) => {
+        const widgets = this.props.widgets.filter(
+            (widget) => (
+                widget.pageId === pid
+            )
+        )
+
+        this.setState({
+            widgets
+        })
+    }
+
     render() {
+        const {uid, wid, pid, widgets} = this.state
         return (
             <div>
-                <nav class="navbar navbar-light fixed-top bg-light">
-                    <a class="color-black" href="../Page/Page-list.html">
-                        <i class="fas fa-chevron-left" />
-                    </a>
-                    <a class="navbar-brand" href="Widget-list.html">
+                <nav className="navbar navbar-light fixed-top bg-light">
+                    <Link className="color-black" to={`/user/${uid}/website/${wid}/page`}>
+                        <i className="fas fa-chevron-left" />
+                    </Link>
+                    <span className="navbar-brand">
                         Widgets
-                    </a>
-                    <a class="color-black" href="Widget-chooser.html">
-                        <i class="fas fa-plus" />
-                    </a>
+                    </span>
+                    <Link className="color-black" to={`/user/${uid}/website/${wid}/page/${pid}/widget/new`}>
+                        <i className="fas fa-plus" />
+                    </Link>
                 </nav>
 
-                <div class="container-fluid">
-                    <div>
-                        <div class="absolute-right">
-                            <a href="Widget-heading.html">
-                                <i class="fas fa-cog" />
-                            </a>
-                            <a href="#">
-                                <i class="fas fa-bars" />
-                            </a>
-                        </div>
+                <div className="container-fluid">
+                    {
+                        widgets.map(
+                            (widget) => {
+                                switch(widget.widgetType){
+                                    case "HEADING":
+                                        return (
+                                            <div key={widget._id}>
+                                                <div className="absolute-right">
+                                                    <Link to={`/user/${uid}/website/${wid}/page/${pid}/widget/${widget._id}`}>
+                                                        <i className="fas fa-cog" />
+                                                    </Link>
+                                                    <span>
+                                                        <i className="fas fa-bars" />
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    {widget.size === 1 && <h1>{widget.text}</h1>}
+                                                    {widget.size === 2 && <h2>{widget.text}</h2>}
+                                                    {widget.size === 3 && <h3>{widget.text}</h3>}
+                                                    {widget.size === 4 && <h4>{widget.text}</h4>}
+                                                    {widget.size === 5 && <h5>{widget.text}</h5>}
+                                                    {widget.size === 6 && <h6>{widget.text}</h6>}
+                                                </div>
+                                            </div>
+                                        )
+                                    case "IMAGE":
+                                            return (
+                                                <div key={widget._id}>
+                                                   <div className="absolute-right">
+                                                        <Link to={`/user/${uid}/website/${wid}/page/${pid}/widget/${widget._id}`}>
+                                                            <i className="fas fa-cog" />
+                                                        </Link>
+                                                        <span>
+                                                            <i className="fas fa-bars" />
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <img
+                                                            className="img-fluid"
+                                                            src={widget.url}
+                                                            alt=""
+                                                            width={widget.width}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            )
+                                    case "YOUTUBE":
+                                                return (
+                                                    <div key={widget._id}>
+                                                        <div className="absolute-right">
+                                                            <Link to={`/user/${uid}/website/${wid}/page/${pid}/widget/${widget._id}`}>
+                                                                <i className="fas fa-cog" />
+                                                            </Link>
+                                                            <span>
+                                                                <i className="fas fa-bars" />
+                                                            </span>
+                                                        </div>
+                                                        <div className="embed-responsive embed-responsive-16by9" style={{width: widget.width}}>
+                                                            <iframe
+                                                                src={widget.url}
+                                                                title={widget._id}
+                                                                frameBorder="0"
+                                                                allow="autoplay; encrypted-media"
+                                                                allowFullScreen
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                )
+                                        default:
+                                            return <div></div>;
+                                }
+                            }
+                        )
+                    }
+                    {/* 
 
-                        <div>
-                            <h1>Welcome</h1>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="absolute-right">
-                            <a href="Widget-heading.html">
-                                <i class="fas fa-cog" />
-                            </a>
-                            <a href="#">
-                                <i class="fas fa-bars" />
-                            </a>
-                        </div>
-
-                        <div>
-                            <h3>
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Similique saepe vel sit
-                                repellendus quis
-                            </h3>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="absolute-right">
-                            <a href="Widget-image.html">
-                                <i class="fas fa-cog" />
-                            </a>
-                            <a href="#">
-                                <i class="fas fa-bars" />
-                            </a>
-                        </div>
-
-                        <div>
-                            <img
-                                class="img-fluid"
-                                src="https://www.gettyimages.ie/gi-resources/images/Homepage/Hero/UK/CMS_Creative_164657191_Kingfisher.jpg"
-                                alt="bird image"
-                            />
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="absolute-right">
-                            <a href="Widget-heading.html">
-                                <i class="fas fa-cog" />
-                            </a>
-                            <a href="#">
-                                <i class="fas fa-bars" />
-                            </a>
-                        </div>
-
-                        <div>
-                            <h5>
-                                Lorem ipsum dolor sit amet consectetur
-                                adipisicing elit. Tempora, architecto
-                                dignissimos. Voluptatibus placeat excepturi eum{" "}
-                                <a href="http://www.google.com">
-                                    repellendus totam quam error atque
-                                </a>{" "}
-                                asperiores, blanditiis sequi sit, reiciendis
-                                quibusdam? In numquam expedita impedit.
-                            </h5>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="absolute-right">
-                            <a href="Widget-heading.html">
-                                <i class="fas fa-cog" />
-                            </a>
-                            <a href="#">
-                                <i class="fas fa-bars" />
-                            </a>
-                        </div>
-
-                        <div>
-                            <h3> vel sit repellendus quis</h3>
-                        </div>
-                    </div>
 
                     <div>
-                        <div class="absolute-right">
+                        <div className="absolute-right">
                             <a href="Widget-youtube.html">
-                                <i class="fas fa-cog" />
+                                <i className="fas fa-cog" />
                             </a>
                             <a href="#">
-                                <i class="fas fa-bars" />
+                                <i className="fas fa-bars" />
                             </a>
                         </div>
 
-                        <div class="embed-responsive embed-responsive-16by9">
+                        <div className="embed-responsive embed-responsive-16by9">
                             <iframe
                                 width="1903"
                                 height="769"
@@ -132,12 +146,12 @@ export default class WidgetList extends Component {
                     </div>
 
                     <div>
-                        <div class="absolute-right">
+                        <div className="absolute-right">
                             <a href="Widget-heading.html">
-                                <i class="fas fa-cog" />
+                                <i className="fas fa-cog" />
                             </a>
                             <a href="#">
-                                <i class="fas fa-bars" />
+                                <i className="fas fa-bars" />
                             </a>
                         </div>
 
@@ -151,17 +165,17 @@ export default class WidgetList extends Component {
                                 eius.
                             </h5>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
 
-                <footer class="navbar navbar-light fixed-bottom bg-light">
-                    <div class="full-width">
-                        <a
-                            class="color-black float-right"
-                            href="../User/Profile.html"
+                <footer className="navbar navbar-light fixed-bottom bg-light">
+                    <div className="full-width">
+                        <Link
+                            className="color-black float-right"
+                            to={`/user/${uid}`}
                         >
-                            <i class="fas fa-user" />
-                        </a>
+                            <i className="fas fa-user" />
+                        </Link>
                     </div>
                 </footer>
             </div>

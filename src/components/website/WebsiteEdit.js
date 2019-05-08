@@ -69,7 +69,7 @@ export default class WebsiteEdit extends Component {
         const { uid } = this.state;
         return (
             <div>
-                <nav className="navbar navbar-light bg-dark fixed-top row">
+                <nav className="navbar navbar-light bg-primary fixed-top row">
                     <div className="col-lg-4 d-none d-lg-block text-center text-white">
                         <Link className="float-left" to="/user/:uid/website">
                             <i className="fas fa-arrow-circle-left" />

@@ -22,3 +22,9 @@ label {
 .width-90 {
   width:90%
 }
+
+.absolute-right {
+  position: absolute;
+  right: 15px;
+  z-index: 2;
+}
