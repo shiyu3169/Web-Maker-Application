@@ -28,3 +28,6 @@ label {
   right: 15px;
   z-index: 2;
 }
+span {
+  cursor: pointer;
+}

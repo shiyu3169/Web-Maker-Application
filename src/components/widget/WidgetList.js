@@ -120,52 +120,6 @@ export default class WidgetList extends Component {
                             }
                         )
                     }
-                    {/* 
-
-
-                    <div>
-                        <div className="absolute-right">
-                            <a href="Widget-youtube.html">
-                                <i className="fas fa-cog" />
-                            </a>
-                            <a href="#">
-                                <i className="fas fa-bars" />
-                            </a>
-                        </div>
-
-                        <div className="embed-responsive embed-responsive-16by9">
-                            <iframe
-                                width="1903"
-                                height="769"
-                                src="https://www.youtube.com/embed/SqrbIlUwR0U"
-                                frameborder="0"
-                                allow="autoplay; encrypted-media"
-                                allowfullscreen
-                            />
-                        </div>
-                    </div>
-
-                    <div>
-                        <div className="absolute-right">
-                            <a href="Widget-heading.html">
-                                <i className="fas fa-cog" />
-                            </a>
-                            <a href="#">
-                                <i className="fas fa-bars" />
-                            </a>
-                        </div>
-
-                        <div>
-                            <h5>
-                                Lorem ipsum dolor sit amet consectetur
-                                adipisicing elit. Officiis nostrum maiores
-                                blanditiis iste doloribus harum magni ullam
-                                repellat eaque? Et veniam accusantium illo
-                                nostrum dolores temporibus. Cum cupiditate alias
-                                eius.
-                            </h5>
-                        </div>
-                    </div> */}
                 </div>
 
                 <footer className="navbar navbar-light fixed-bottom bg-light">

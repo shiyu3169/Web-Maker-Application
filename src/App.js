@@ -15,6 +15,8 @@ import PageNew from "./components/page/PageNew";
 import PageEdit from "./components/page/PageEdit";
 // Widgets
 import WidgetList from "./components/widget/WidgetList";
+import WidgetChooser from "./components/widget/WidgetChooser";
+import WidgetEdit from "./components/widget/WidgetEdit";
 
 class App extends Component {
 
@@ -44,8 +46,9 @@ class App extends Component {
             { _id: "234", widgetType: "HEADING", pageId: "321", size: 4, text: "Lorem ipsum"},
             { _id: "345", widgetType: "IMAGE", pageId: "321", width: "100%", url: "https://www.gettyimages.ie/gi-resources/images/Homepage/Hero/UK/CMS_Creative_164657191_Kingfisher.jpg"},
             { _id: "567", widgetType: "HEADING", pageId: "321", size: 4, text: "Lorem ipsum"},
-            { _id: "678", widgetType: "YOUTUBE", pageId: "321", width: "100%", url: "https://youtu.be/qttOFtpUSyc" },
+            { _id: "678", widgetType: "YOUTUBE", pageId: "321", width: "100%", url: "https://www.youtube.com/embed/qttOFtpUSyc" },
           ]
+          
     }
 
         addUser = (user) => {
@@ -150,6 +153,40 @@ class App extends Component {
         })
     }
 
+    editWidget = newWidget => {
+        
+        const newWidgets = this.state.widgets.map(
+            (widget) => {
+                if(widget._id === newWidget._id) {
+                    widget = newWidget
+                }
+                return widget;
+            }
+        )
+        this.setState({
+            widgets: newWidgets
+        })
+    }
+
+    addWidget = newWidget => {
+        const newWidgets = this.state.widgets;
+        newWidgets.push(newWidget);
+        this.setState({
+            widgets: newWidgets
+        });
+    }
+
+    deleteWidget = (wgid) => {
+        const newWidgets = this.state.widgets.filter(
+            (widget) => (
+                widget._id !== wgid
+            )
+        )
+        this.setState({
+            widgets: newWidgets
+        })
+    }
+
     render() {
         
         return (
@@ -166,6 +203,8 @@ class App extends Component {
                     <Route exact path="/user/:uid/website/:wid/page/new" render={ props => (<PageNew {...props} pages={this.state.pages} addPage={this.addPage} />)} />
                     <Route exact path="/user/:uid/website/:wid/page/:pid" render={ props => (<PageEdit {...props} pages={this.state.pages} editPage={this.editPage} deletePage={this.deletePage} />)} />
                     <Route exact path="/user/:uid/website/:wid/page/:pid/widget" render={ props=>(<WidgetList {...props} widgets={this.state.widgets} />)} />
+                    <Route exact path="/user/:uid/website/:wid/page/:pid/widget/new" render={props=>(<WidgetChooser {...props} addWidget={this.addWidget} />)} />
+                    <Route exact path="/user/:uid/website/:wid/page/:pid/widget/:wgid" render={ props=>(<WidgetEdit {...props} widgets={this.state.widgets} editWidget={this.editWidget} deleteWidget={this.deleteWidget} />)} />
                 </Switch>
             </Router>
         );
