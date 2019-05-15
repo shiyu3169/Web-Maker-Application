@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import uuid from "uuid";
+import axios from "axios";
+import uuid from "uuid"
 export default class Register extends Component {
 
     state = {
@@ -21,7 +22,7 @@ export default class Register extends Component {
         this.register(username, password, password2);
     }
 
-    register(username, password, password2) {
+    async register(username, password, password2) {
         // Does passwords match
         if(password !== password2) {
             alert("The passwords are not match");
@@ -29,26 +30,23 @@ export default class Register extends Component {
         }
 
         // Check if username is available
-        for(let user of this.props.users){
-            if(user.username === username){
-                alert("Username is taken, please try another one");
-                return;
-            }
+        const res = await axios.get(`/api/user?username=${username}`);
+        
+        if(res.data){
+            alert("Username is taken, please try another one");
+            return;
+        } else {
+            const newUser = {
+                _id: uuid(),
+                username,
+                password,
+                email: "",
+                firstName: "",
+                lastName: ""
+            };
+            const res2 = await axios.post("/api/user", newUser);
+            this.props.history.push(`/user/${res2.data._id}`);
         }
-
-        // Add new user into users array;
-        const newUser = {
-            _id: uuid(),
-            username,
-            password,
-            email: "",
-            firstName: "",
-            lastName: ""
-        };
-        this.props.addUser(newUser);
-
-        // Navigate to profile
-        this.props.history.push(`/user/${newUser._id}`);
     }
 
     render() {

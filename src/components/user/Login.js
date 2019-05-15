@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 export default class Login extends Component {
 
@@ -24,14 +25,13 @@ export default class Login extends Component {
         this.login(user);
     }
 
-    login = user => {
-        for(let item of this.props.users) {
-            if(item.username === user.username && item.password === user.password) {
-                this.props.history.push("/user/" + item._id);
-                return;
-            }
+    login = async user => {
+        const res = await axios.get(`/api/user?username=${user.username}&password=${user.password}`)
+        if(res.data){
+            this.props.history.push(`/user/${res.data._id}`);
+        } else {
+            alert("invalid credential");
         }
-        alert("Your username and password doesn't match our records");
     }
 
     render() {
