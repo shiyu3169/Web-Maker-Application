@@ -21,15 +21,6 @@ import WidgetEdit from "./components/widget/WidgetEdit";
 class App extends Component {
 
     state = {
-        websites: [
-            { _id: "123", name: "Facebook", developerId: "456", description: "Lorem" },
-            { _id: "234", name: "Tweeter",  developerId: "456", description: "Lorem" },
-            { _id: "456", name: "Gizmodo",   developerId: "456", description: "Lorem" },
-            { _id: "890", name: "Go", developerId: "123", description: "Lorem" },
-            { _id: "567", name: "Tic Tac Toe", developerId: "123", description: "Lorem" },
-            { _id: "678", name: "Checkers", developerId: "123", description: "Lorem" },
-            { _id: "789", name: "Chess", developerId: "234", description: "Lorem" }
-          ],
         pages: [
             { _id: "321", name: "Post 1", websiteId: "456", title: "Lorem" },
             { _id: "432", name: "Post 2", websiteId: "456", title: "Lorem" },
@@ -45,35 +36,6 @@ class App extends Component {
           
     }
 
-    addWeb = (newWeb) => {
-        const newWebs = this.state.websites;
-        newWebs.push(newWeb);
-        this.setState({
-            websites: newWebs
-        });
-    }
-
-    deleteWeb =(wid) => {
-        this.setState({
-            websites: this.state.websites.filter(
-                (website) => website._id !== wid
-            )
-        })
-    }
-
-    editWeb = (wid, name, description) => {
-        this.setState({
-            websites: this.state.websites.map(
-                (website) => {
-                    if(wid === website._id){
-                        website.name = name;
-                        website.description =description
-                    }
-                    return website;
-                }
-            )
-        })
-    }
 
     addPage = newPage => {
         const newPages = this.state.pages;
@@ -151,9 +113,9 @@ class App extends Component {
                     <Route exact path="/login" component={Login} />
                     <Route exact path="/register" component={Register} />
                     <Route exact path="/user/:uid" component={Profile}/>
-                    <Route exact path="/user/:uid/website" render= { props => (<WebsiteList {...props} websites={this.state.websites}/>)} />
-                    <Route exact path="/user/:uid/website/new" render={ props => (<WebsiteNew {...props} websites={this.state.websites} addWeb={this.addWeb}/>)} />
-                    <Route exact path="/user/:uid/website/:wid" render={ props => (<WebsiteEdit {...props} websites={this.state.websites} deleteWeb={this.deleteWeb} editWeb={this.editWeb}/>)} />
+                    <Route exact path="/user/:uid/website" component={WebsiteList} />
+                    <Route exact path="/user/:uid/website/new" component={WebsiteNew} />
+                    <Route exact path="/user/:uid/website/:wid" component={WebsiteEdit} />
                     <Route exact path="/user/:uid/website/:wid/page" render={ props => (<PageList {...props} pages={this.state.pages} />)} />
                     <Route exact path="/user/:uid/website/:wid/page/new" render={ props => (<PageNew {...props} pages={this.state.pages} addPage={this.addPage} />)} />
                     <Route exact path="/user/:uid/website/:wid/page/:pid" render={ props => (<PageEdit {...props} pages={this.state.pages} editPage={this.editPage} deletePage={this.deletePage} />)} />

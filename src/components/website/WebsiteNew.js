@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import uuid from "uuid";
+import axios from "axios";
+
 export default class WebsiteNew extends Component {
     state = {
         uid: this.props.match.params.uid,
@@ -9,8 +11,9 @@ export default class WebsiteNew extends Component {
         description: ""
     };
 
-    componentDidMount() {
-        this.filterWebsites(this.props.websites);
+    async componentDidMount(){
+        const res = await axios.get(`/api/user/${this.state.uid}/website`);
+        this.filterWebsites(res.data);
     }
 
     filterWebsites = websites => {
@@ -28,7 +31,7 @@ export default class WebsiteNew extends Component {
         });
     };
 
-    onSubmit = e => {
+    onSubmit = async e => {
         const { name, description, uid } = this.state;
         e.preventDefault();
         const newWeb = {
@@ -37,7 +40,7 @@ export default class WebsiteNew extends Component {
             developerId: uid,
             description
         };
-        this.props.addWeb(newWeb);
+        await axios.post("/api/website", newWeb);
         this.props.history.push(`/user/${this.state.uid}/website`);
     };
 
@@ -45,35 +48,34 @@ export default class WebsiteNew extends Component {
         const { uid } = this.state;
         return (
             <div>
-                <nav className="navbar navbar-light bg-primary fixed-top row">
+                <nav className="navbar navbar-dark bg-primary fixed-top row">
                     <div className="col-lg-4 d-none d-lg-block text-center text-white">
-                        <Link className="float-left" to="/user/:uid/website">
+                        <Link className="float-left" to={`/user/${uid}/website`}>
                             <i className="fas fa-chevron-left" />
                         </Link>
-                        <span className="">Websites</span>
-                        <Link
-                            className="float-right"
-                            to="/user/:uid/website/:wid/page/newl"
+                        <span className=""><strong>Websites</strong></span>
+                        <span
+                            className="float-right"       
                         >
-                            <i className="far fa-plus-square" />
-                        </Link>
+                            <i className="fas fa-plus" />
+                        </span>
                     </div>
                     <div className="col-lg-8 text-center text-white">
                         <Link
                             className="d-lg-none float-left"
-                            to="/user/:uid/website"
+                            to={`/user/${uid}/website`}
                         >
-                            <i className="fas fa-arrow-circle-left" />
+                            <i className="fas fa-chevron-left" />
                         </Link>
-                        <span className="">New Website</span>
-                        <Link className="float-right" to="/user/:uid/website">
-                            <i className="far fa-check-circle" />
-                        </Link>
+                        <span><strong>New Website</strong></span>
+                        <button className="float-right btn" form="newWebForm">
+                            <i className="fas fa-check" />
+                        </button>
                     </div>
                 </nav>
 
                 <div className="row">
-                    <div className="col-4 d-none d-sm-block">
+                    <div className="col-lg-4 d-none d-lg-block">
                         <div className="container-fluid">
                             <ul className="list-group">
                                 {this.state.websites.map(website => (
@@ -102,7 +104,7 @@ export default class WebsiteNew extends Component {
                         </div>
                     </div>
 
-                    <div className="col-sm-8">
+                    <div className="col-lg-8">
                         <div className="container-fluid">
                             <form id="newWebForm" onSubmit={this.onSubmit}>
                                 <div className="form-group">
