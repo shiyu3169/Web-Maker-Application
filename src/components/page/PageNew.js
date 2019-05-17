@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import uuid from "uuid";
+import Axios from "axios";
 
 export default class PageNew extends Component {
 
@@ -24,7 +25,7 @@ export default class PageNew extends Component {
         })
     }
 
-    onSubmit = e => {
+    onSubmit = async e => {
         e.preventDefault();
         const newPage = {
             _id: uuid(),
@@ -32,7 +33,7 @@ export default class PageNew extends Component {
             websiteId: this.state.wid,
             title: this.state.title
         }
-        this.props.addPage(newPage);
+        await Axios.post("/api/page", newPage);
         this.props.history.push(`/user/${this.state.uid}/website/${this.state.wid}/page`)
     }
 

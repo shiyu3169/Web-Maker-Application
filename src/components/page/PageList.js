@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-
+import axios from "axios";
 export default class PageList extends Component {
 
     state = {
@@ -19,14 +19,15 @@ export default class PageList extends Component {
         this.filterPage(this.state.wid);
     }
 
-    filterPage = (wid) => {
-        const currentPages = this.props.pages.filter(
-            (page) => (
-                page.websiteId === wid
-            )
-        )
+    filterPage = async (wid) => {
+        // const currentPages = this.props.pages.filter(
+        //     (page) => (
+        //         page.websiteId === wid
+        //     )
+        // )
+        const res = await axios.get(`/api/website/${this.state.wid}/page`)
         this.setState({
-            pages: currentPages
+            pages: res.data
         })
     }
 
