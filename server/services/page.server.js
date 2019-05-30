@@ -1,45 +1,38 @@
 module.exports = function(app) {
-  // Get all pages for this website
-  app.get('/api/website/:wid/page', (req, res) => {
-    const wid = req.params['wid'];
-    let result = [];
-    result = pages.filter(page => page.websiteId === wid);
+  const pageModel = require("../models/page/page.model");
 
-    res.json(result);
+  // Get all pages for this website
+  app.get('/api/website/:wid/page', async (req, res) => {
+    const wid = req.params['wid'];
+    const websites = await pageModel.findAllPagesForWebsite(wid);
+    res.json(websites);
   });
 
   // Adding new page
-  app.post('/api/page', (req, res) => {
+  app.post('/api/page', async (req, res) => {
     const newPage = req.body;
-    pages.push(newPage);
-    res.json(newPage);
+    const data = await pageModel.createPage(newPage);
+    res.json(data);
   });
 
   // Get page by given id
-  app.get('/api/page/:pid', (req, res) => {
+  app.get('/api/page/:pid', async (req, res) => {
     const pid = req.params['pid'];
-    const page = pages.find(page => page._id === pid);
+    const page = await pageModel.findPageById(pid);
     res.json(page);
   });
 
   // Delete page by given id
-  app.delete('/api/page/:pid', (req, res) => {
+  app.delete('/api/page/:pid', async (req, res) => {
     const pid = req.params['pid'];
-    const page = pages.find(page => page._id === pid);
-    const index = pages.indexOf(page);
-    pages.splice(index, 1);
-    res.json(page);
+    const data = await pageModel.deletePage(pid);
+    res.json(data);
   });
 
   // Update page
-  app.put('/api/page', (req, res) => {
+  app.put('/api/page', async (req, res) => {
     const newPage = req.body;
-    pages = pages.map(page => {
-      if (page._id === newPage._id) {
-        page = newPage;
-      }
-      return page;
-    });
-    res.json(newPage);
+    const data = await pageModel.updatePage(newPage);
+    res.json(data);
   });
 };

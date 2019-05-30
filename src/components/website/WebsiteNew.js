@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import uuid from "uuid";
 import axios from "axios";
 
 export default class WebsiteNew extends Component {
@@ -35,7 +34,6 @@ export default class WebsiteNew extends Component {
         const { name, description, uid } = this.state;
         e.preventDefault();
         const newWeb = {
-            _id: uuid(),
             name,
             developerId: uid,
             description
