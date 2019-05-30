@@ -1,62 +1,39 @@
 module.exports = function(app) {
-    // users data
-    let users = [
-        {_id: "123", username: "alice", password: "alice", firstName: "Alice", lastName: "Wonder", email: "alice@gmail.com"},
-        {_id: "234", username: "bob", password: "bob", firstName: "Bob", lastName: "Marley", email: "bob@whatever.com"},
-        {_id: "345", username: "charly", password: "charly", firstName: "Charly", lastName: "Garcia", email: "charly@ulem.com"},
-        {_id: "456", username: "shiyu", password: "shiyu", firstName: "Shiyu", lastName: "Wang", email: "swang@ulem.org"}
-    ]
 
-    // Find users by username and password
-    app.get("/api/user", (req, res)=> {
-        const username = req.query["username"];
-        const password = req.query["password"];
-        let user;
-        // login to check user credentials
-        if(username && password) {
-            user = users.find((user)=>{
-                return user.username === username && user.password === password
-            })   
-        }
-        // check if username is taken
-        if(username) {
-            user = users.find((user)=>{
-                return user.username === username
-            })
-        }
+  const userModel = require("../models/user/user.model");
 
-        res.json(user);
-    })
+  // Find users by username and password
+  app.get('/api/user', async (req, res) => {
+    const username = req.query['username'];
+    const password = req.query['password'];
+    let user;
+    if(username && password){
+      user = await userModel.findUserByCredentials(username, password);
+    } else if (username) {
+      user = await userModel.findUserByUsername(username);
+    }
+    res.json(user);
+  });
 
-    // Create new user
-    app.post("/api/user", (req, res) => {
-        const user = req.body;
-        users.push(user);
-        res.json(user);
-    })
+  // Create new user
+  app.post('/api/user', async (req, res) => {
+    const user = req.body;
+    const data = await userModel.createUser(user);
+    res.json(data);
+  });
 
-    // Find user by _id
-    app.get("/api/user/:uid", (req, res) => {
-        const uid = req.params["uid"];
-        let user;
-        user = users.find((user) => {
-            return user._id === uid;
-        })
+  // Find user by _id
+  app.get('/api/user/:uid', async (req, res) => {
+    const uid = req.params['uid'];
+    let user;
+    user = await userModel.findUserById(uid);
+    res.json(user);
+  });
 
-        res.json(user);
-    })
-
-    // Update user
-    app.put("/api/user", (req, res) => {
-        const newUser = req.body;
-        users = users.map(
-            (user)=>{
-                if(user._id === newUser._id){
-                    user = newUser
-                }
-                return user;
-            }
-        )
-        res.json(newUser);
-    })
+  // Update user
+  app.put('/api/user', async (req, res) => {
+    const newUser = req.body;
+    const data = await userModel.updateUser(newUser);
+    res.json(data);
+  });
 };
