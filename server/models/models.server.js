@@ -5,7 +5,7 @@ if (process.env.MLAB_USERNAME_WEBDEV) {
   var username = process.env.MLAB_USERNAME_WEBDEV; // get from environment
   var password = process.env.MLAB_PASSWORD_WEBDEV;
   connectionString = 'mongodb://' + username + ':' + password;
-  connectionString += '@ds0000.mlab.com:29004/dasdasds'; // use yours
+  connectionString += '@ds363996.mlab.com:63996/heroku_3lxcssmv'; // use yours
 }
 
 var mongoose = require('mongoose');
