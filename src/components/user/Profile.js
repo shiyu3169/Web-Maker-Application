@@ -13,6 +13,12 @@ export default class Profile extends Component {
     }
 
     async componentDidMount(){
+        const isLoggedIn = await this.props.loggedIn();
+        if(!isLoggedIn) {
+            this.props.history.push("/login");
+            return;
+        }
+        
         const uid = this.props.match.params.uid;
         const res = await axios.get(`/api/user/${uid}`);
         if(res.data){
@@ -62,6 +68,12 @@ export default class Profile extends Component {
         await axios.put("/api/user", newUser);
         alert("Update Successfully")
     }
+
+    // Logout the user
+    logout = async () => {
+        await axios.post("/api/logout");
+        this.props.history.push("/login");
+    }
     
 
     render() {
@@ -75,6 +87,7 @@ export default class Profile extends Component {
                     </button>
                 </nav>
                 <div className="container">
+                    {/* <div className="alert alert-success">Update Successfully</div> */}
                     <form id="profileForm" onSubmit={this.onSubmit}>
                         <div className="form-group">
                             <label htmlFor="username">Username</label>
@@ -130,9 +143,9 @@ export default class Profile extends Component {
                         >
                             Websites
                         </Link>
-                        <Link to="/login" className="btn btn-danger btn-block">
+                        <button type="button" onClick={this.logout} className="btn btn-danger btn-block">
                             Logout
-                        </Link>
+                        </button>
                     </form>
                 </div>
                 <nav className="navbar navbar-dark bg-primary fixed-bottom">
