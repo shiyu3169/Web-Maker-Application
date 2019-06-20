@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import Navbar from "../utility/Navbar"
+import Footer from "../utility/Footer"
+
 export default class PageList extends Component {
 
     state = {
@@ -20,11 +23,6 @@ export default class PageList extends Component {
     }
 
     filterPage = async (wid) => {
-        // const currentPages = this.props.pages.filter(
-        //     (page) => (
-        //         page.websiteId === wid
-        //     )
-        // )
         const res = await axios.get(`/api/website/${this.state.wid}/page`)
         this.setState({
             pages: res.data
@@ -35,18 +33,12 @@ export default class PageList extends Component {
         const {uid, wid} = this.state;
         return (
             <div>
-                <nav className="navbar navbar-light fixed-top bg-light">
-                    <Link className="color-black" to={`/user/${uid}/website`}>
-                        <i className="fas fa-chevron-left" />
-                    </Link>
-                    <span className="navbar-brand">
-                        Pages
-                    </span>
-                    <Link className="color-black" to={`/user/${uid}/website/${wid}/page/new`}>
-                        <i className="fas fa-plus" />
-                    </Link>
-                </nav>
-
+                <Navbar 
+                    backBtn={`/user/${uid}/website`}
+                    title="Pages"
+                    rightBtn="plus"
+                    rightBtnTo={`/user/${uid}/website/${wid}/page/new`}
+                />
                 <div className="container">
                     <ul className="list-group">
                         {
@@ -61,25 +53,9 @@ export default class PageList extends Component {
                                 )
                             )
                         }
-                        {/* <li className="list-group-item">
-                            <a href="../Widget/Widget-list.html">Blog Post</a>
-                            <a className="float-right" href="Page-edit.html">
-                                <i className="fas fa-cog" />
-                            </a>
-                        </li> */}
                     </ul>
                 </div>
-
-                <footer className="navbar navbar-light fixed-bottom bg-light">
-                    <div className="full-width">
-                        <Link
-                            className="color-black float-right"
-                            to={`/user/${uid}`}
-                        >
-                            <i className="fas fa-user" />
-                        </Link>
-                    </div>
-                </footer>
+                <Footer uid={uid} />
             </div>
         );
     }

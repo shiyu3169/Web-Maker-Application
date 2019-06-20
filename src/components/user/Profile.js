@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Footer from '../utility/Footer';
+import Navbar from '../utility/Navbar';
+import loading from '../../img/loading.gif';
+
 export default class Profile extends Component {
   state = {
     username: '',
@@ -14,10 +18,10 @@ export default class Profile extends Component {
 
   async componentDidMount() {
     const isLoggedIn = await this.props.loggedIn();
-    if (isLoggedIn === 0) {
-      this.props.history.push('/login');
-      return;
-    }
+    // if (isLoggedIn === 0) {
+    //   this.props.history.push('/login');
+    //   return;
+    // }
 
     const uid = this.props.match.params.uid;
     const res = await axios.get(`/api/user/${uid}`);
@@ -85,90 +89,87 @@ export default class Profile extends Component {
 
   render() {
     const { username, email, firstName, lastName, role } = this.state;
+    const { uid } = this.props.match.params;
     return (
       <div>
-        <nav className='navbar navbar-dark bg-primary fixed-top'>
-          <span className='navbar-brand mb-0 h1'>Profile</span>
-          <button className='btn' form='profileForm' href='profile.html'>
-            <i className='fas fa-check' />
-          </button>
-        </nav>
-        <div className='container'>
-          {/* <div className="alert alert-success">Update Successfully</div> */}
-          <form id='profileForm' onSubmit={this.onSubmit}>
-            <div className='form-group'>
-              <label htmlFor='username'>Username</label>
-              <input
-                placeholder='Enter or edit your username...'
-                className='form-control'
-                type='text'
-                id='username'
-                name='username'
-                value={username}
-                onChange={this.onChange}
-              />
-            </div>
-            <div className='form-group'>
-              <label htmlFor='email'>Email</label>
-              <input
-                placeholder='Enter or edit your email address...'
-                type='email'
-                className='form-control'
-                id='email'
-                name='email'
-                value={email}
-                onChange={this.onChange}
-              />
-            </div>
-            <div className='form-group'>
-              <label htmlFor='firstName'>First Name</label>
-              <input
-                placeholder='Enter or edit your first name...'
-                className='form-control'
-                type='text'
-                id='firstName'
-                name='firstName'
-                value={firstName}
-                onChange={this.onChange}
-              />
-            </div>
-            <div className='form-group'>
-              <label htmlFor='lastName'>Last Name</label>
-              <input
-                placeholder='Enter or edit your last name...'
-                type='text'
-                className='form-control'
-                id='lastName'
-                name='lastName'
-                value={lastName}
-                onChange={this.onChange}
-              />
-            </div>
-            <Link
-              className='btn btn-primary btn-block'
-              to={`/user/${this.props.match.params.uid}/website`}
-            >
-              Websites
-            </Link>
-            <button
-              type='button'
-              onClick={this.logout}
-              className='btn btn-danger btn-block'
-            >
-              Logout
-            </button>
-            {role === 'admin' ? (
-              <Link className='btn btn-warning btn-block' to='/manage'>
-                Manage Users
+        <Navbar title='Profile' rightBtn='check' form='profileForm' />
+        {username === '' ? (
+          <div className='text-center'>
+            <img src={loading} alt='loading' />
+          </div>
+        ) : (
+          <div className='container'>
+            <form id='profileForm' onSubmit={this.onSubmit}>
+              <div className='form-group'>
+                <label htmlFor='username'>Username</label>
+                <input
+                  placeholder='Enter or edit your username...'
+                  className='form-control'
+                  type='text'
+                  id='username'
+                  name='username'
+                  value={username}
+                  onChange={this.onChange}
+                />
+              </div>
+              <div className='form-group'>
+                <label htmlFor='email'>Email</label>
+                <input
+                  placeholder='Enter or edit your email address...'
+                  type='email'
+                  className='form-control'
+                  id='email'
+                  name='email'
+                  value={email}
+                  onChange={this.onChange}
+                />
+              </div>
+              <div className='form-group'>
+                <label htmlFor='firstName'>First Name</label>
+                <input
+                  placeholder='Enter or edit your first name...'
+                  className='form-control'
+                  type='text'
+                  id='firstName'
+                  name='firstName'
+                  value={firstName}
+                  onChange={this.onChange}
+                />
+              </div>
+              <div className='form-group'>
+                <label htmlFor='lastName'>Last Name</label>
+                <input
+                  placeholder='Enter or edit your last name...'
+                  type='text'
+                  className='form-control'
+                  id='lastName'
+                  name='lastName'
+                  value={lastName}
+                  onChange={this.onChange}
+                />
+              </div>
+              <Link
+                className='btn btn-primary btn-block'
+                to={`/user/${this.props.match.params.uid}/website`}
+              >
+                Websites
               </Link>
-            ) : null}
-          </form>
-        </div>
-        <nav className='navbar navbar-dark bg-primary fixed-bottom'>
-          <span>
-            <i className='fas fa-user' />
-          </span>
-        </nav>
+              <button
+                type='button'
+                onClick={this.logout}
+                className='btn btn-danger btn-block'
+              >
+                Logout
+              </button>
+              {role === 'admin' ? (
+                <Link className='btn btn-warning btn-block' to='/manage'>
+                  Manage Users
+                </Link>
+              ) : null}
+            </form>
+          </div>
+        )}
+        <Footer uid={uid} />
       </div>
     );
   }

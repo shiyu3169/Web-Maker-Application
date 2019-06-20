@@ -15,22 +15,22 @@ const session = require('express-session');
 
 app.use(cookieParser());
 
-if(process.env.SESSION_SECRET) {
-    app.use(
-        session({
-            secret: process.env.SESSION_SECRET,
-            resave: true,
-            saveUninitialized: true
-        })
-    );
+if (process.env.SESSION_SECRET) {
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET,
+      resave: true,
+      saveUninitialized: true
+    })
+  );
 } else {
-    app.use(
-        session({
-            secret: "testLocal",
-            resave: true,
-            saveUninitialized: true
-        })
-    )
+  app.use(
+    session({
+      secret: 'testLocal',
+      resave: true,
+      saveUninitialized: true
+    })
+  );
 }
 
 // passport lib
@@ -38,7 +38,6 @@ const passport = require('passport');
 
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 // Initialize bodyparser. We are turn on the feature to parse json data.
 app.use(bodyParser.json());

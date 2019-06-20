@@ -1,28 +1,16 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import Footer from "../utility/Footer"
+import Websites from "./Websites"
 
 export default class WebsiteNew extends Component {
     state = {
         uid: this.props.match.params.uid,
-        websites: [],
         name: "",
         description: ""
     };
 
-    async componentDidMount(){
-        const res = await axios.get(`/api/user/${this.state.uid}/website`);
-        this.filterWebsites(res.data);
-    }
-
-    filterWebsites = websites => {
-        const newWebsites = websites.filter(
-            website => website.developerId === this.state.uid
-        );
-        this.setState({
-            websites: newWebsites
-        });
-    };
 
     onChange = e => {
         this.setState({
@@ -75,30 +63,7 @@ export default class WebsiteNew extends Component {
                 <div className="row">
                     <div className="col-lg-4 d-none d-lg-block">
                         <div className="container-fluid">
-                            <ul className="list-group">
-                                {this.state.websites.map(website => (
-                                    <li
-                                        key={website._id}
-                                        className="list-group-item"
-                                    >
-                                        <Link
-                                            to={`/user/${uid}/website/${
-                                                website._id
-                                            }/page`}
-                                        >
-                                            {website.name}
-                                        </Link>
-                                        <Link
-                                            to={`/user/${uid}/website/${
-                                                website._id
-                                            }`}
-                                            className="float-right"
-                                        >
-                                            <i className="fas fa-cog" />
-                                        </Link>
-                                    </li>
-                                ))}
-                            </ul>
+                            <Websites uid={uid} />
                         </div>
                     </div>
 
@@ -147,16 +112,7 @@ export default class WebsiteNew extends Component {
                         </div>
                     </div>
                 </div>
-                <nav className="navbar navbar-dark bg-primary fixed-bottom">
-                    <div className="full-width">
-                        <Link
-                            className="color-white float-right"
-                            to={`/user/${uid}`}
-                        >
-                            <i className="fas fa-user" />
-                        </Link>
-                    </div>
-                </nav>
+                <Footer uid={uid} />
             </div>
         );
     }

@@ -36,16 +36,6 @@ export default class Login extends Component {
                 showAlert: true
             })
         }
-        // const res = await axios.post('/api/login', user);
-
-        // if(res.data){
-        //     this.props.history.push(`/user/${res.data._id}`);
-        // } else {
-        //     // alert("invalid credential");
-        //     this.setState({
-        //         showAlert: true
-        //     })
-        // }
     }
 
     render() {
